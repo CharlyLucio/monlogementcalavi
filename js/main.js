@@ -13,110 +13,135 @@ const QUARTIERS = [
   { id: "bidossessi", name: "Bidossessi", listings: 34 }
 ];
 
+const TYPE_LABELS = {
+  "entree-couchee": "Entrée couchée",
+  "chambre-salon": "Chambre Salon",
+  "1-chambre-salon": "1 Chambre Salon",
+  "appartement": "2+ Chambres Salon",
+  "studio": "Studio",
+  "colocation": "Colocation"
+};
+
 let LISTINGS = [
   {
     id: 1,
-    title: "Chambre avec entrée personnelle à Zogbadjè",
+    title: "Entrée couchée Sanitaire à Zogbadjè, près du petit portail",
     quartier: "Zogbadjè",
-    type: "chambre",
-    prix: 18000,
+    type: "entree-couchee",
+    sanitaire: "Sanitaire",
+    prix: 20000,
     chambres: 1,
     formal: true,
     badges: ["premium"],
     phone: "01 97 00 00 01",
-    desc: "Chambre avec salle d'eau et WC privés, compteur personnel, proche du petit portail du campus. Sécurité garantie, eau et électricité disponibles.",
-    feats: ["Salle d'eau + WC", "Compteur personnel", "Prise internet", "Sécurité"]
+    desc: "Entrée couchée sanitaire avec salle d'eau et WC privés, compteur personnel, proche du petit portail du campus. Sécurité garantie, eau et électricité disponibles. Plafonnée et carrelée.",
+    conditions: ["Avance : 3+1", "Caution E-E : 20 000 F"],
+    feats: ["Salle d'eau + WC privés", "Compteur personnel", "Plafonnée + carrelée", "Sécurité", "Proche campus"]
   },
   {
     id: 2,
-    title: "Studio meublé au calme près de l'IITA",
+    title: "Studio meublé au calme près de l'IITA, Godomey",
     quartier: "Godomey",
     type: "studio",
+    sanitaire: "Sanitaire",
     prix: 25000,
     chambres: 1,
     formal: true,
     badges: ["new"],
     phone: "01 97 00 00 02",
-    desc: "Studio entièrement meublé (lit, armoire, table, ventilateur), douche interne, quartier calme et sécurisé. À 5 minutes de l'IITA.",
-    feats: ["Entièrement meublé", "Douche interne", "Ventilateur", "Quartier calme"]
+    desc: "Studio entièrement meublé (lit, armoire, table, ventilateur), douche interne, quartier calme et sécurisé. À 5 minutes de l'IITA. Convenable pour 1 étudiant sérieux.",
+    conditions: ["Avance : 3+1", "Caution E-E : 20 000 F"],
+    feats: ["Entièrement meublé", "Douche interne", "Ventilateur", "Quartier calme", "Sécurité"]
   },
   {
     id: 3,
-    title: "Appartement 2 chambres salon à Kpota",
+    title: "2 Chambres Salon Sanitaire à Kpota (colocation possible)",
     quartier: "Kpota",
     type: "appartement",
+    sanitaire: "Sanitaire",
     prix: 60000,
     chambres: 2,
     formal: true,
     badges: [],
     phone: "01 97 00 00 03",
-    desc: "2 chambres salon-sanitaire spacieuses, carrelage, plafond, cuisine. Idéal pour colocation entre 2-3 étudiants. Compteurs individuels.",
-    feats: ["2 chambres + salon", "Cuisine", "Carrelage", "Plafond", "Compteurs individuels"]
+    desc: "2 chambres salon-sanitaire spacieuses, carrelage, plafond staff, cuisine. Idéal pour colocation entre 2-3 étudiants. Compteurs individuels. Cour commune clôturée.",
+    conditions: ["Avance : 3+1", "Caution E-E : 50 000 F"],
+    feats: ["2 chambres + salon", "Cuisine", "Carrelage + plafond staff", "Compteurs individuels", "Cour clôturée"]
   },
   {
     id: 4,
-    title: "Chambre simple bonne qualité à Tankpè",
+    title: "Entrée couchée Ordinaire très abordable à Tankpè",
     quartier: "Tankpè",
-    type: "chambre",
+    type: "entree-couchee",
+    sanitaire: "Ordinaire",
     prix: 12000,
     chambres: 1,
     formal: true,
     badges: ["urgent"],
     phone: "01 97 00 00 04",
-    desc: "Chambre simple avec WC commun, plafonnée, bien aérée. Près de la voie principale, boutiques et gbakossè. Loyers abordables.",
-    feats: ["WC commun", "Plafonnée", "Bien aérée", "Prix abordable"]
+    desc: "Entrée couchée ordinaire avec WC commun, plafonnée, bien aérée. Près de la voie principale, boutiques et gbakossè. Loyers abordables, adapté petit budget étudiant.",
+    conditions: ["Avance : 3+1", "Caution E-E : 10 000 F"],
+    feats: ["WC commun", "Plafonnée", "Bien aérée", "Prix abordable", "Proche voie principale"]
   },
   {
     id: 5,
     title: "Colocation étudiante à Zoca (2 places)",
     quartier: "Zoca",
     type: "colocation",
+    sanitaire: "Semi-Sanitaire",
     prix: 15000,
     chambres: 2,
     formal: true,
     badges: ["new"],
     phone: "01 97 00 00 05",
-    desc: "2 étudiants partagent un appart 1 salon 2 chambres. Chaque chambre 15 000 F/mois. Frais d'eau et d'électricité partagés. Quartier étudiant.",
-    feats: ["Colocation", "1 salon 2 chambres", "Eau/électricité inclus", "Quartier étudiant"]
+    desc: "2 étudiants partagent un appart 1 salon 2 chambres. Chaque chambre 15 000 F/mois. Frais d'eau et d'électricité partagés. Quartier étudiant. Salle d'eau commune.",
+    conditions: ["Avance : 3+1", "Charges partagées"],
+    feats: ["Colocation", "1 salon 2 chambres", "Eau/électricité partagée", "Quartier étudiant", "Salle d'eau commune"]
   },
   {
     id: 6,
-    title: "Entrée personnelle 3 pièces à Bidossessi",
+    title: "3 Chambres Salon Sanitaire à Bidossessi",
     quartier: "Bidossessi",
     type: "appartement",
+    sanitaire: "Sanitaire",
     prix: 45000,
     chambres: 3,
     formal: true,
     badges: ["premium"],
     phone: "01 97 00 00 06",
-    desc: "3 chambres-salon sanitaire avec salle d'eau moderne, douche italienne, plafond staff. Bonne exposition, cour commune. 5 min de la voie asphaltée.",
-    feats: ["3 chambres-salon", "Douche italienne", "Plafond staff", "Cour commune"]
+    desc: "3 chambres-salon sanitaire avec salle d'eau moderne, douche italienne, plafond staff, carrelage. Bonne exposition, cour personnelle pour véhicule. 5 min de la voie asphaltée.",
+    conditions: ["Avance : 3+1", "Caution E-E : 50 000 F"],
+    feats: ["3 chambres-salon", "Douche italienne", "Plafond staff", "Cour personnelle", "Garage/extérieur"]
   },
   {
     id: 7,
-    title: "Studio économique pour étudiant à Zogbadjè",
+    title: "Studio simple sans cuisine à Zogbadjè, à 300 m du campus",
     quartier: "Zogbadjè",
     type: "studio",
+    sanitaire: "Semi-Sanitaire",
     prix: 20000,
     chambres: 1,
     formal: true,
     badges: [],
     phone: "01 97 00 00 07",
-    desc: "Studio simple avec douche interne, sans cuisine, à 300 m du campus. Très demandé à la rentrée. Disponible vite, visitez maintenant.",
-    feats: ["Douche interne", "Proche campus", "Disponible vite", "Sans cuisine"]
+    desc: "Studio simple avec douche interne, sans cuisine, à 300 m du campus. Très demandé à la rentrée. Disponible vite, visitez maintenant. Salle d'eau partagée avec la cour.",
+    conditions: ["Avance : 3+1", "Caution E-E : 15 000 F"],
+    feats: ["Douche interne", "Sans cuisine", "Proche campus", "Disponible vite"]
   },
   {
     id: 8,
-    title: "Appartement 1 chambre-salon neuf à Godomey",
+    title: "1 Chambre Salon Sanitaire neuf à Godomey Togoudo",
     quartier: "Godomey",
-    type: "appartement",
+    type: "1-chambre-salon",
+    sanitaire: "Sanitaire",
     prix: 35000,
     chambres: 1,
     formal: true,
     badges: ["premium"],
     phone: "01 97 00 00 08",
-    desc: "Construction neuve, carrelage moderne, douche, plafond, compteurs personnels. Quartier sécurisé avec accès facile. Très propre.",
-    feats: ["Construction neuve", "Carrelage moderne", "Douche", "Compteurs personnels"]
+    desc: "1 chambre-salon sanitaire construction neuve, carrelage moderne, douche, plafond, compteurs personnels. Quartier sécurisé avec accès facile. Très propre.",
+    conditions: ["Avance : 3+1", "Caution E-E : 30 000 F"],
+    feats: ["Construction neuve", "Carrelage moderne", "Salon + chambre", "Douche", "Compteurs personnels"]
   }
 ];
 
@@ -165,8 +190,9 @@ function badgeHtml(listing) {
 function listingCard(listing) {
   const isFav = state.favs.has(listing.id);
   const isPremium = (listing.badges || []).includes("premium");
-  const feats = `<span>${ICON_BED} ${listing.chambres || 1} ch.</span><span>${ICON_WATER} Eau</span>`;
-  const phone = listing.phone || "Contact via plateforme";
+  const typeLabel = TYPE_LABELS[listing.type] || listing.type;
+  const sanLabel = listing.sanitaire ? ` · ${listing.sanitaire}` : "";
+  const feats = `<span>${ICON_BED} ${listing.chambres || 1} ${listing.chambres > 1 ? "ch." : "ch."}</span><span>${ICON_WATER} Eau</span>`;
   return `
   <article class="listing-card ${isPremium ? "premium" : ""}" data-id="${listing.id}" tabindex="0" role="button" aria-label="Voir les détails de : ${listing.title}">
     <div class="listing-media">
@@ -178,6 +204,7 @@ function listingCard(listing) {
       <div class="listing-price">${fmtPrix(listing.prix)}<span> / mois</span></div>
       <h3 class="listing-title">${listing.title}</h3>
       <div class="listing-loc">${ICON_PIN} ${listing.quartier}</div>
+      <div class="listing-type">${typeLabel}${sanLabel}</div>
       <div class="listing-feats">${feats}</div>
       <div class="listing-footer">
         <span class="btn btn-amber btn-sm">${ICON_CALL} Voir détails</span>
@@ -224,12 +251,19 @@ function openDetail(listing) {
     .map(f => `<span class="detail-feat">${f}</span>`)
     .join("");
 
+  const typeLabel = TYPE_LABELS[listing.type] || listing.type;
+  const sanLabel = listing.sanitaire ? ` · ${listing.sanitaire}` : "";
+  const conditions = (listing.conditions || [])
+    .map(c => `<li>${c}</li>`)
+    .join("");
+
   $("#detailTitle").textContent = listing.title;
   $("#detailPrice").innerHTML = `<span class="detail-price-amt">${fmtPrix(listing.prix)}</span> / mois`;
-  $("#detailLoc").innerHTML = `${ICON_PIN} ${listing.quartier}`;
+  $("#detailLoc").innerHTML = `${ICON_PIN} ${listing.quartier} · ${typeLabel}${sanLabel}`;
   $("#detailDesc").textContent = listing.desc || "Description à venir. Contactez le propriétaire pour plus de détails et une visite.";
   $("#detailBadges").innerHTML = badgeHtml(listing);
   $("#detailFeats").innerHTML = feats;
+  $("#detailConditions").innerHTML = conditions;
 
   const phone = (listing.phone || "").replace(/\s/g, "");
   $("#detailCall").setAttribute("href", "tel:" + phone);
@@ -250,6 +284,9 @@ function openDetail(listing) {
       $("#detailImgMain").src = imgFor(listing, Number(btn.dataset.photo));
     });
   });
+
+  // Remettre le scroll de la fiche en haut à chaque ouverture
+  $("#detailModal").querySelector(".detail-scroll").scrollTop = 0;
 
   modal.hidden = false;
   document.body.style.overflow = "hidden";

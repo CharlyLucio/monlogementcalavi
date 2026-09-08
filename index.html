@@ -56,9 +56,11 @@
             <label class="visually-hidden" for="searchType">Type de logement</label>
             <select id="searchType" name="type">
               <option value="">Tous les types</option>
-              <option value="chambre">Chambre</option>
+              <option value="entree-couchee">Entrée couchée</option>
+              <option value="chambre-salon">Chambre Salon</option>
+              <option value="1-chambre-salon">1 Chambre Salon</option>
+              <option value="appartement">2+ Chambres Salon</option>
               <option value="studio">Studio</option>
-              <option value="appartement">Appartement</option>
               <option value="colocation">Colocation</option>
             </select>
           </div>
@@ -228,9 +230,12 @@
           <div>
             <label for="fType">Type *</label>
             <select id="fType" name="type" required>
-              <option value="chambre">Chambre</option>
+              <option value="">Choisir...</option>
+              <option value="entree-couchee">Entrée couchée (Ordinaire / Semi-Sanitaire / Sanitaire)</option>
+              <option value="chambre-salon">Chambre Salon (Ordinaire / Semi-Sanitaire / Sanitaire)</option>
+              <option value="1-chambre-salon">1 Chambre Salon</option>
+              <option value="appartement">2/3/4... Chambres Salon</option>
               <option value="studio">Studio</option>
-              <option value="appartement">Appartement</option>
               <option value="colocation">Colocation</option>
             </select>
           </div>
@@ -286,6 +291,7 @@
   <div class="modal" id="detailModal" hidden>
     <div class="modal-backdrop" data-detail-close></div>
     <div class="modal-card detail-card" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="detail-scroll">
       <button class="modal-close" data-detail-close aria-label="Fermer les détails">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
@@ -306,6 +312,11 @@
 
         <div class="detail-feats" id="detailFeats"></div>
 
+        <div class="detail-conditions">
+          <h3>Conditions de location</h3>
+          <ul id="detailConditions"></ul>
+        </div>
+
         <div class="detail-desc">
           <h3>À propos de ce logement</h3>
           <p id="detailDesc"></p>
@@ -322,6 +333,7 @@
             Contacter sur WhatsApp
           </a>
         </div>
+      </div>
       </div>
     </div>
   </div>
