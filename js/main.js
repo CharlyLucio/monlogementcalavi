@@ -33,6 +33,8 @@ let LISTINGS = [
     chambres: 1,
     formal: true,
     badges: ["premium"],
+    verified: true,
+    isOwner: true,
     phone: "01 97 00 00 01",
     desc: "Entrée couchée sanitaire avec salle d'eau et WC privés, compteur personnel, proche du petit portail du campus. Sécurité garantie, eau et électricité disponibles. Plafonnée et carrelée.",
     conditions: ["Avance : 3+1", "Caution E-E : 20 000 F"],
@@ -63,6 +65,8 @@ let LISTINGS = [
     chambres: 2,
     formal: true,
     badges: [],
+    verified: true,
+    boost: true,
     phone: "01 97 00 00 03",
     desc: "2 chambres salon-sanitaire spacieuses, carrelage, plafond staff, cuisine. Idéal pour colocation entre 2-3 étudiants. Compteurs individuels. Cour commune clôturée.",
     conditions: ["Avance : 3+1", "Caution E-E : 50 000 F"],
@@ -93,6 +97,7 @@ let LISTINGS = [
     chambres: 2,
     formal: true,
     badges: ["new"],
+    verified: true,
     phone: "01 97 00 00 05",
     desc: "2 étudiants partagent un appart 1 salon 2 chambres. Chaque chambre 15 000 F/mois. Frais d'eau et d'électricité partagés. Quartier étudiant. Salle d'eau commune.",
     conditions: ["Avance : 3+1", "Charges partagées"],
@@ -138,6 +143,7 @@ let LISTINGS = [
     chambres: 1,
     formal: true,
     badges: ["premium"],
+    isOwner: true,
     phone: "01 97 00 00 08",
     desc: "1 chambre-salon sanitaire construction neuve, carrelage moderne, douche, plafond, compteurs personnels. Quartier sécurisé avec accès facile. Très propre.",
     conditions: ["Avance : 3+1", "Caution E-E : 30 000 F"],
@@ -178,13 +184,20 @@ function imgFor(listing, i) {
 }
 
 /* ---------- Rendering ---------- */
+const BADGE_MAP = {
+  premium: '<span class="badge premium">Premium</span>',
+  urgent: '<span class="badge urgent">Urgent</span>',
+  new: '<span class="badge new">Nouveau</span>',
+  verified: '<span class="badge verified">Vérifié</span>',
+  boost: '<span class="badge boost">En tête</span>'
+};
+
 function badgeHtml(listing) {
-  const map = {
-    premium: '<span class="badge premium">Premium</span>',
-    urgent: '<span class="badge urgent">Urgent</span>',
-    new: '<span class="badge new">Nouveau</span>'
-  };
-  return (listing.badges || []).map(b => map[b] || "").join("");
+  const out = [];
+  if (listing.verified) out.push(BADGE_MAP.verified);
+  if (listing.boost) out.push(BADGE_MAP.boost);
+  (listing.badges || []).forEach(b => { if (BADGE_MAP[b]) out.push(BADGE_MAP[b]); });
+  return out.join("");
 }
 
 function listingCard(listing) {
@@ -193,8 +206,11 @@ function listingCard(listing) {
   const typeLabel = TYPE_LABELS[listing.type] || listing.type;
   const sanLabel = listing.sanitaire ? ` · ${listing.sanitaire}` : "";
   const feats = `<span>${ICON_BED} ${listing.chambres || 1} ${listing.chambres > 1 ? "ch." : "ch."}</span><span>${ICON_WATER} Eau</span>`;
+  const boostBtn = listing.isOwner
+    ? `<button class="btn btn-outline btn-sm listing-boost-cta" data-boost="${listing.id}">Booster (en tête)</button>`
+    : "";
   return `
-  <article class="listing-card ${isPremium ? "premium" : ""}" data-id="${listing.id}" tabindex="0" role="button" aria-label="Voir les détails de : ${listing.title}">
+  <article class="listing-card ${isPremium ? "premium" : ""} ${listing.boost ? "boosted" : ""}" data-id="${listing.id}" tabindex="0" role="button" aria-label="Voir les détails de : ${listing.title}">
     <div class="listing-media">
       <img class="listing-img" src="${imgFor(listing, 0)}" alt="${listing.title}" loading="lazy">
       <div class="listing-badges">${badgeHtml(listing)}</div>
@@ -209,6 +225,7 @@ function listingCard(listing) {
       <div class="listing-footer">
         <span class="btn btn-amber btn-sm">${ICON_CALL} Voir détails</span>
       </div>
+      ${boostBtn}
     </div>
   </article>`;
 }
@@ -227,6 +244,9 @@ function renderListings() {
     if (budget && l.prix > Number(budget)) return false;
     return true;
   });
+
+  // Les annonces boostées (en tête) passent devant
+  list.sort((a, b) => (b.boost ? 1 : 0) - (a.boost ? 1 : 0));
 
   grid.innerHTML = list.map(listingCard).join("");
   $("#resultCount").textContent = `${list.length} annonce(s) trouvée(s)`;
@@ -302,10 +322,10 @@ function initDetail() {
   $$("[data-detail-close]", modal).forEach(el => el.addEventListener("click", closeDetail));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDetail(); });
 
-  // Délégation : clic sur une carte -> ouvrir les détails (sauf sur le bouton favori)
+  // Délégation : clic sur une carte -> ouvrir les détails (sauf bouton favori / boost)
   document.addEventListener("click", (e) => {
-    const favBtn = e.target.closest("[data-fav]");
-    if (favBtn) return;
+    if (e.target.closest("[data-fav]")) return;
+    if (e.target.closest("[data-boost]")) return;
     const card = e.target.closest(".listing-card[data-id]");
     if (!card) return;
     const listing = LISTINGS.find(l => l.id === Number(card.dataset.id));
@@ -427,12 +447,21 @@ function initToTop() {
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
 
+/* ---------- Envoi Netlify Forms ---------- */
+function submitNetlify(form) {
+  return fetch("/", {
+    method: "POST",
+    body: new FormData(form)
+  });
+}
+
 /* ---------- Formulaires ---------- */
 function initModal() {
   const modal = $("#submitModal");
   const openBtn = $("#submitBtn");
   const form = $("#submitForm");
   const success = $("#submitSuccess");
+  const successText = $("#submitSuccessText");
   const qSelect = $("#fQuartier");
 
   const quartierNames = [...new Set(LISTINGS.map(l => l.quartier))].sort();
@@ -452,9 +481,85 @@ function initModal() {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    form.hidden = true;
-    success.hidden = false;
-    // TODO (phase 2): envoyer la demande + lien de paiement MTN via Netlify Functions
+    const btn = form.querySelector("button[type=submit]");
+    btn.textContent = "Envoi en cours...";
+    btn.disabled = true;
+
+    submitNetlify(form)
+      .then(res => {
+        const formule = form.elements["formule"].value;
+        if (formule === "gratuit") {
+          successText.textContent = "Votre demande est bien reçue. Nous vérifions votre annonce par téléphone sous 24 h puis nous la publions. C'est gratuit !";
+        } else {
+          successText.textContent = "Votre annonce (avec boost) est bien reçue. Nous vous envoyons par WhatsApp le numéro MoMo pour payer " + (formule === "boost-3j" ? "500 F" : "1 000 F") + " puis activer la mise en tête.";
+        }
+        form.hidden = true;
+        success.hidden = false;
+        form.reset();
+        btn.textContent = "Envoyer ma demande";
+        btn.disabled = false;
+      })
+      .catch(() => {
+        successText.textContent = "Une erreur est survenue. Envoyez-nous votre demande par WhatsApp au 02 90 00 00 00.";
+        form.hidden = true;
+        success.hidden = false;
+        btn.textContent = "Envoyer ma demande";
+        btn.disabled = false;
+      });
+  });
+}
+
+/* ---------- Boost ---------- */
+function initBoost() {
+  const modal = $("#boostModal");
+  const form = $("#boostForm");
+  const success = $("#boostSuccess");
+
+  function close() { modal.hidden = true; document.body.style.overflow = ""; }
+  function open() { modal.hidden = false; document.body.style.overflow = "hidden"; }
+
+  $$("[data-boost-close]").forEach(el => el.addEventListener("click", close));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-boost]");
+    if (!btn) return;
+    const listing = LISTINGS.find(l => l.id === Number(btn.dataset.boost));
+    if (!listing) return;
+    $("#bAnnonceId").value = listing.id;
+    $("#bAnnonceTitre").value = listing.title;
+    $("#bPhone").value = "";
+    $("#bRef").value = "";
+    $("#bDuree").value = "boost-3j";
+    form.hidden = false;
+    success.hidden = true;
+    open();
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const btn = form.querySelector("button[type=submit]");
+    btn.textContent = "Envoi en cours...";
+    btn.disabled = true;
+
+    submitNetlify(form)
+      .then(() => {
+        const id = Number($("#bAnnonceId").value);
+        const listing = LISTINGS.find(l => l.id === id);
+        if (listing) listing.boost = true;
+        form.hidden = true;
+        success.hidden = false;
+        renderListings();
+        form.reset();
+        btn.textContent = "Valider mon boost";
+        btn.disabled = false;
+      })
+      .catch(() => {
+        form.hidden = true;
+        success.hidden = false;
+        btn.textContent = "Valider mon boost";
+        btn.disabled = false;
+      });
   });
 }
 
@@ -479,6 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initToTop();
   initModal();
+  initBoost();
   initDetail();
   initReveal();
   renderQuartiers();

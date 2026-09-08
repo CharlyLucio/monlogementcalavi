@@ -136,7 +136,7 @@
         <div class="how-card">
           <span class="how-num">1</span>
           <h3>Propriétaires</h3>
-          <p>Publiez votre annonce en 2 minutes avec photos, prix et quartier. Une annonce standard coûte 1 000 FCFA pour 30 jours.</p>
+          <p>Publiez votre annonce en 2 minutes avec photos, prix et quartier. Votre première annonce est gratuite pendant 30 jours, puis à partir de 500 F pour rester visible en tête.</p>
         </div>
         <div class="how-card">
           <span class="how-num">2</span>
@@ -157,7 +157,7 @@
         <h2>Vous avez un logement à louer à Calavi ?</h2>
         <p>Mettez votre annonce devant des milliers d'étudiants à la recherche d'un logement.</p>
         <a href="#" class="btn btn-amber btn-lg" id="submitBtn">Publier une annonce</a>
-        <p class="submit-note">Annonce standard : 1 000 FCFA / 30 jours. Premium : 2 500 FCFA avec mise en avant.</p>
+        <p class="submit-note">1ère annonce gratuite 30 jours · Boost en tête dès 500 F · Vérification des annonces par téléphone</p>
       </div>
     </section>
 
@@ -217,8 +217,9 @@
         </svg>
       </button>
       <h2 id="modalTitle">Publier une annonce</h2>
-      <p class="modal-sub">Remplissez ce formulaire. Nos équipes vérifieront et publieront l'annonce après confirmation du paiement (MTN MoMo).</p>
-      <form id="submitForm" class="submit-form">
+      <p class="modal-sub">Votre 1ère annonce est gratuite. Remplissez ce formulaire : nous vérifions par téléphone puis publiions. Pour être en tête des résultats, ajoutez un Boost MTN MoMo.</p>
+      <form id="submitForm" class="submit-form" name="publier" method="post" data-netlify="true">
+        <input type="hidden" name="form-name" value="publier">
         <label for="fTitre">Titre de l'annonce *</label>
         <input type="text" id="fTitre" name="titre" required placeholder="Ex : Chambre à louer à Zogbadjè près du petit portail">
 
@@ -261,11 +262,11 @@
             <input type="tel" id="fPhone" name="phone" required placeholder="01 97 00 00 00">
           </div>
           <div>
-            <label for="fFormule">Formule *</label>
+            <label for="fFormule">Visibilité *</label>
             <select id="fFormule" name="formule" required>
-              <option value="standard">Standard - 1 000 FCFA / 30 jours</option>
-              <option value="urgent">Urgent - 1 500 FCFA (badge)</option>
-              <option value="premium">Premium - 2 500 FCFA (mise en avant)</option>
+              <option value="gratuit">Gratuit - 1ère annonce / 30 jours</option>
+              <option value="boost-3j">Boost 3 jours - 500 F (MTN MoMo)</option>
+              <option value="boost-7j">Boost 7 jours - 1 000 F (MTN MoMo)</option>
             </select>
           </div>
         </div>
@@ -276,13 +277,64 @@
           <p class="form-hint">Le téléversement de photos sera disponible prochainement. Vous pouvez envoyer les photos par WhatsApp après la soumission.</p>
         </fieldset>
 
-        <button type="submit" class="btn btn-amber btn-lg btn-block">Envoyer ma demande + lien de paiement MTN</button>
-        <p class="form-note">En soumettant, vous acceptez nos conditions. L'annonce est publiée après vérification et confirmation du paiement.</p>
+        <button type="submit" class="btn btn-amber btn-lg btn-block">Envoyer ma demande</button>
+        <p class="form-note">Annonce gratuite : publiée après vérification téléphonique sous 24 h. Boost payant : instructions de paiement MTN MoMo par WhatsApp après envoi.</p>
       </form>
       <div id="submitSuccess" class="success-box" hidden>
         <h3>Demande envoyée !</h3>
-        <p>Vous allez recevoir le lien de paiement MTN MoMo par SMS/WhatsApp. Dès le paiement confirmé, votre annonce sera publiée.</p>
+        <p id="submitSuccessText">Votre demande est bien reçue. Nous vérifions votre annonce par téléphone sous 24 h puis nous la publions.</p>
         <button class="btn btn-outline" data-close>Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boost modal -->
+  <div class="modal" id="boostModal" hidden>
+    <div class="modal-backdrop" data-boost-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="boostTitle">
+      <button class="modal-close" data-boost-close aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 id="boostTitle">Booster une annonce</h2>
+      <p class="modal-sub">Mettez votre annonce en tête des résultats à Calavi. Paiement par MTN MoMo.</p>
+      <form id="boostForm" class="submit-form" name="boost" method="post" data-netlify="true">
+        <input type="hidden" name="form-name" value="boost">
+        <input type="hidden" id="bAnnonceId" name="annonce_id">
+        <label for="bAnnonceTitre">Annonce</label>
+        <input type="text" id="bAnnonceTitre" name="annonce_titre" readonly>
+
+        <div class="form-row">
+          <div>
+            <label for="bPhone">Votre numéro MTN (MoMo) *</label>
+            <input type="tel" id="bPhone" name="phone" required placeholder="01 97 00 00 00">
+          </div>
+          <div>
+            <label for="bDurnee">Durée du boost *</label>
+            <select id="bDuree" name="duree" required>
+              <option value="boost-3j">3 jours - 500 F</option>
+              <option value="boost-7j">7 jours - 1 000 F</option>
+            </select>
+          </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+          <legend>Paiement MTN MoMo</legend>
+          <p class="form-hint">1. Envoyez le montant au numéro MoMo du site ci-dessous.</p>
+          <p class="momo-number">02 90 00 00 00 (MonLogementCalavi)</p>
+          <p class="form-hint">2. Saisissez la référence reçue par SMS après votre paiement.</p>
+          <label for="bRef">Référence de la transaction MoMo *</label>
+          <input type="text" id="bRef" name="ref_momo" required placeholder="Ex : MOMO123456">
+        </fieldset>
+
+        <button type="submit" class="btn btn-amber btn-lg btn-block">Valider mon boost</button>
+        <p class="form-note">Nous vérifions la transaction MoMo puis activons le boost sous 30 minutes. Sans confirmation, votre annonce reste gratuite.</p>
+      </form>
+      <div id="boostSuccess" class="success-box" hidden>
+        <h3>Boost confirmé !</h3>
+        <p>Votre annonce est en tête des résultats. Pensez à l'actualiser pour garder votre visibilité.</p>
+        <button class="btn btn-outline" data-boost-close>Fermer</button>
       </div>
     </div>
   </div>
