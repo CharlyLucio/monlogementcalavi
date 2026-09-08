@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MonLogementCalavi - Trouvez votre logement étudiant à Calavi</title>
+  <meta name="description" content="MonLogementCalavi est la plateforme de référence pour trouver un logement étudiant à Calavi. Appartements, chambres, studios à louer près de l'UAC.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+
+  <!-- Header -->
+  <header class="site-header" id="header">
+    <nav class="nav container" aria-label="Navigation principale">
+      <a href="#top" class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>
+        </svg>
+        <span>Mon<span class="accent">Logement</span>Calavi</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>
+        </svg>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#annonces">Annonces</a></li>
+        <li><a href="#quartiers">Quartiers</a></li>
+        <li><a href="#comment">Comment ça marche</a></li>
+        <li><a href="#soumettre" class="btn btn-amber btn-sm">Publier une annonce</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="hero-overlay"></div>
+      <div class="hero-content container">
+        <p class="hero-eyebrow">La référence pour les étudiants et propriétaires</p>
+        <h1>Trouvez votre logement à Calavi, <span class="accent">sans stress</span></h1>
+        <p class="hero-sub">Appartements, chambres et studios près de l'UAC. Annonces vérifiées, prix clairs, en FCFA.</p>
+
+        <!-- Search bar -->
+        <form class="search-bar" id="searchForm" role="search">
+          <div class="search-field">
+            <label class="visually-hidden" for="searchQuartier">Quartier</label>
+            <select id="searchQuartier" name="quartier">
+              <option value="">Tous les quartiers</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label class="visually-hidden" for="searchType">Type de logement</label>
+            <select id="searchType" name="type">
+              <option value="">Tous les types</option>
+              <option value="chambre">Chambre</option>
+              <option value="studio">Studio</option>
+              <option value="appartement">Appartement</option>
+              <option value="colocation">Colocation</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label class="visually-hidden" for="searchBudget">Budget max</label>
+            <select id="searchBudget" name="budget">
+              <option value="">Tous les budgets</option>
+              <option value="15000">15 000 F et moins</option>
+              <option value="25000">25 000 F et moins</option>
+              <option value="35000">35 000 F et moins</option>
+              <option value="50000">50 000 F et moins</option>
+              <option value="75000">75 000 F et moins</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+            </svg>
+            Rechercher
+          </button>
+        </form>
+
+        <!-- Stats -->
+        <div class="hero-stats" id="heroStats">
+          <div class="stat"><span class="stat-num" id="statListings">0</span><span class="stat-label">annonces</span></div>
+          <div class="stat"><span class="stat-num" id="statQuartiers">0</span><span class="stat-label">quartiers</span></div>
+          <div class="stat"><span class="stat-num" id="statStudiants">0</span><span class="stat-label">étudiants aidés</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listings -->
+    <section class="listings-section container" id="annonces">
+      <div class="section-head">
+        <h2>Annonces récentes</h2>
+        <div class="chips" role="group" aria-label="Filtres rapides">
+          <button class="chip active" data-filter="all">Tout</button>
+          <button class="chip" data-filter="rent">À louer</button>
+          <button class="chip" data-filter="new">Nouveautés</button>
+          <button class="chip" data-filter="premium">Premium</button>
+        </div>
+      </div>
+      <p class="result-count" id="resultCount" aria-live="polite"></p>
+      <div class="listings-grid" id="listingsGrid">
+        <!-- Render cards here -->
+      </div>
+      <div class="empty-state" id="emptyState" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M19 5L5 19"/><path d="M5 5l14 14"/>
+        </svg>
+        <h3>Aucune annonce trouvée</h3>
+        <p>Essayez d'autres quartiers ou critères.</p>
+      </div>
+    </section>
+
+    <!-- Quartiers -->
+    <section class="quartiers-section container" id="quartiers">
+      <div class="section-head">
+        <h2>Quartiers populaires</h2>
+        <p class="section-sub">Les quartiers les plus recherchés par les étudiants de Calavi</p>
+      </div>
+      <div class="quartiers-grid" id="quartiersGrid">
+        <!-- Render tiles here -->
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-section container" id="comment">
+      <div class="section-head">
+        <h2>Comment ça marche</h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <span class="how-num">1</span>
+          <h3>Propriétaires</h3>
+          <p>Publiez votre annonce en 2 minutes avec photos, prix et quartier. Une annonce standard coûte 1 000 FCFA pour 30 jours.</p>
+        </div>
+        <div class="how-card">
+          <span class="how-num">2</span>
+          <h3>Étudiants</h3>
+          <p>Recherchez par quartier, budget et type de logement. Consultez les annonces vérifiées et contactez directement le propriétaire.</p>
+        </div>
+        <div class="how-card">
+          <span class="how-num">3</span>
+          <h3>Location conclue</h3>
+          <p>Visitez le logement, signez le bail et emménagez. Simple, rapide, sans agence coûteuse.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Submit CTA -->
+    <section class="submit-section" id="soumettre">
+      <div class="container">
+        <h2>Vous avez un logement à louer à Calavi ?</h2>
+        <p>Mettez votre annonce devant des milliers d'étudiants à la recherche d'un logement.</p>
+        <a href="#" class="btn btn-amber btn-lg" id="submitBtn">Publier une annonce</a>
+        <p class="submit-note">Annonce standard : 1 000 FCFA / 30 jours. Premium : 2 500 FCFA avec mise en avant.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <span class="brand"><span>Mon<span class="accent">Logement</span>Calavi</span></span>
+        <p class="footer-text">La plateforme de référence pour le logement étudiant à Calavi. Bientôt disponible : Colocation, sous-location et alertes par WhatsApp.</p>
+      </div>
+      <div>
+        <h4>Liens rapides</h4>
+        <ul>
+          <li><a href="#annonces">Annonces</a></li>
+          <li><a href="#quartiers">Quartiers</a></li>
+          <li><a href="#soumettre">Publier</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Quartiers couverts</h4>
+        <ul>
+          <li>Zogbadjè</li>
+          <li>Godomey</li>
+          <li>Kpota</li>
+          <li>Tankpè</li>
+          <li>Zoca</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:contact@monlogementcalavi.netlify.app">contact@monlogementcalavi.netlify.app</a></li>
+          <li>Abomey-Calavi, Bénin</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MonLogementCalavi. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" aria-label="Retour en haut" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <!-- Submit modal -->
+  <div class="modal" id="submitModal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" data-close aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 id="modalTitle">Publier une annonce</h2>
+      <p class="modal-sub">Remplissez ce formulaire. Nos équipes vérifieront et publieront l'annonce après confirmation du paiement (MTN MoMo).</p>
+      <form id="submitForm" class="submit-form">
+        <label for="fTitre">Titre de l'annonce *</label>
+        <input type="text" id="fTitre" name="titre" required placeholder="Ex : Chambre à louer à Zogbadjè près du petit portail">
+
+        <div class="form-row">
+          <div>
+            <label for="fQuartier">Quartier *</label>
+            <select id="fQuartier" name="quartier" required></select>
+          </div>
+          <div>
+            <label for="fType">Type *</label>
+            <select id="fType" name="type" required>
+              <option value="chambre">Chambre</option>
+              <option value="studio">Studio</option>
+              <option value="appartement">Appartement</option>
+              <option value="colocation">Colocation</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label for="fPrix">Prix (FCFA/mois) *</label>
+            <input type="number" id="fPrix" name="prix" required min="5000" placeholder="20000">
+          </div>
+          <div>
+            <label for="fChambres">Chambres</label>
+            <input type="number" id="fChambres" name="chambres" min="0" placeholder="1">
+          </div>
+        </div>
+
+        <label for="fDescription">Description *</label>
+        <textarea id="fDescription" name="description" rows="4" required placeholder="Décrivez le logement : état, équipements, proximité du campus, sécurité, eau, électricité..."></textarea>
+
+        <div class="form-row">
+          <div>
+            <label for="fPhone">Votre numéro (MTN/Moov) *</label>
+            <input type="tel" id="fPhone" name="phone" required placeholder="01 97 00 00 00">
+          </div>
+          <div>
+            <label for="fFormule">Formule *</label>
+            <select id="fFormule" name="formule" required>
+              <option value="standard">Standard - 1 000 FCFA / 30 jours</option>
+              <option value="urgent">Urgent - 1 500 FCFA (badge)</option>
+              <option value="premium">Premium - 2 500 FCFA (mise en avant)</option>
+            </select>
+          </div>
+        </div>
+
+        <fieldset class="form-fieldset">
+          <legend>Photo du logement (optionnel pour l'instant)</legend>
+          <input type="file" id="fPhoto" name="photo" accept="image/*">
+          <p class="form-hint">Le téléversement de photos sera disponible prochainement. Vous pouvez envoyer les photos par WhatsApp après la soumission.</p>
+        </fieldset>
+
+        <button type="submit" class="btn btn-amber btn-lg btn-block">Envoyer ma demande + lien de paiement MTN</button>
+        <p class="form-note">En soumettant, vous acceptez nos conditions. L'annonce est publiée après vérification et confirmation du paiement.</p>
+      </form>
+      <div id="submitSuccess" class="success-box" hidden>
+        <h3>Demande envoyée !</h3>
+        <p>Vous allez recevoir le lien de paiement MTN MoMo par SMS/WhatsApp. Dès le paiement confirmé, votre annonce sera publiée.</p>
+        <button class="btn btn-outline" data-close>Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
