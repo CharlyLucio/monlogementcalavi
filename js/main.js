@@ -24,7 +24,8 @@ let LISTINGS = [
     formal: true,
     badges: ["premium"],
     phone: "01 97 00 00 01",
-    desc: "Chambre avec salle d'eau et WC privés, compteur personnel, proche du petit portail du campus. Sécurité garantie, eau et électricité disponibles."
+    desc: "Chambre avec salle d'eau et WC privés, compteur personnel, proche du petit portail du campus. Sécurité garantie, eau et électricité disponibles.",
+    feats: ["Salle d'eau + WC", "Compteur personnel", "Prise internet", "Sécurité"]
   },
   {
     id: 2,
@@ -36,7 +37,8 @@ let LISTINGS = [
     formal: true,
     badges: ["new"],
     phone: "01 97 00 00 02",
-    desc: "Studio entièrement meublé (lit, armoire, table, ventilateur), douche interne, quartier calme et sécurisé. À 5 minutes de l'IITA."
+    desc: "Studio entièrement meublé (lit, armoire, table, ventilateur), douche interne, quartier calme et sécurisé. À 5 minutes de l'IITA.",
+    feats: ["Entièrement meublé", "Douche interne", "Ventilateur", "Quartier calme"]
   },
   {
     id: 3,
@@ -48,7 +50,8 @@ let LISTINGS = [
     formal: true,
     badges: [],
     phone: "01 97 00 00 03",
-    desc: "2 chambres salon-sanitaire spacieuses, carrelage, plafond, cuisine. Idéal pour colocation entre 2-3 étudiants. Compteurs individuels."
+    desc: "2 chambres salon-sanitaire spacieuses, carrelage, plafond, cuisine. Idéal pour colocation entre 2-3 étudiants. Compteurs individuels.",
+    feats: ["2 chambres + salon", "Cuisine", "Carrelage", "Plafond", "Compteurs individuels"]
   },
   {
     id: 4,
@@ -60,7 +63,8 @@ let LISTINGS = [
     formal: true,
     badges: ["urgent"],
     phone: "01 97 00 00 04",
-    desc: "Chambre simple avec WC commun, plafonnée, bien aérée. Près de la voie principale, boutiques et gbakossè. Loyers abordables."
+    desc: "Chambre simple avec WC commun, plafonnée, bien aérée. Près de la voie principale, boutiques et gbakossè. Loyers abordables.",
+    feats: ["WC commun", "Plafonnée", "Bien aérée", "Prix abordable"]
   },
   {
     id: 5,
@@ -72,7 +76,8 @@ let LISTINGS = [
     formal: true,
     badges: ["new"],
     phone: "01 97 00 00 05",
-    desc: "2 étudiants partagent un appart 1 salon 2 chambres. Chaque chambre 15 000 F/mois. Frais d'eau et d'électricité partagés. Quartier étudiant."
+    desc: "2 étudiants partagent un appart 1 salon 2 chambres. Chaque chambre 15 000 F/mois. Frais d'eau et d'électricité partagés. Quartier étudiant.",
+    feats: ["Colocation", "1 salon 2 chambres", "Eau/électricité inclus", "Quartier étudiant"]
   },
   {
     id: 6,
@@ -84,7 +89,8 @@ let LISTINGS = [
     formal: true,
     badges: ["premium"],
     phone: "01 97 00 00 06",
-    desc: "3 chambres-salon sanitaire avec salle d'eau moderne, douche italienne, plafond staff. Bonne exposition, cour commune. 5 min de la voie asphaltée."
+    desc: "3 chambres-salon sanitaire avec salle d'eau moderne, douche italienne, plafond staff. Bonne exposition, cour commune. 5 min de la voie asphaltée.",
+    feats: ["3 chambres-salon", "Douche italienne", "Plafond staff", "Cour commune"]
   },
   {
     id: 7,
@@ -96,7 +102,8 @@ let LISTINGS = [
     formal: true,
     badges: [],
     phone: "01 97 00 00 07",
-    desc: "Studio simple avec douche interne, sans cuisine, à 300 m du campus. Très demandé à la rentrée. Disponible vite, visitez maintenant."
+    desc: "Studio simple avec douche interne, sans cuisine, à 300 m du campus. Très demandé à la rentrée. Disponible vite, visitez maintenant.",
+    feats: ["Douche interne", "Proche campus", "Disponible vite", "Sans cuisine"]
   },
   {
     id: 8,
@@ -108,7 +115,8 @@ let LISTINGS = [
     formal: true,
     badges: ["premium"],
     phone: "01 97 00 00 08",
-    desc: "Construction neuve, carrelage moderne, douche, plafond, compteurs personnels. Quartier sécurisé avec accès facile. Très propre."
+    desc: "Construction neuve, carrelage moderne, douche, plafond, compteurs personnels. Quartier sécurisé avec accès facile. Très propre.",
+    feats: ["Construction neuve", "Carrelage moderne", "Douche", "Compteurs personnels"]
   }
 ];
 
@@ -138,9 +146,10 @@ const ICON_CALL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 /* ---------- Images (placeholders avec gradient) ---------- */
 function imgFor(listing, i) {
   const hues = ["#1e3a5f,#0ea5e9", "#3b2f14,#f59e0b", "#1a2f3a,#38bdf8", "#241a10,#d97706", "#0f2533,#2f4460", "#2a1f33,#a855f7"];
-  const h = hues[listing.id % hues.length];
+  const h = hues[(listing.id + (i || 0)) % hues.length];
   const [c1, c2] = h.split(",");
-  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='400'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23${c1.replace("#", "")}'/%3E%3Cstop offset='1' stop-color='%23${c2.replace("#", "")}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='40' fill='%23ffffff' fill-opacity='0.6' text-anchor='middle' dominant-baseline='middle'%3E${listing.quartier}%3C/text%3E%3C/svg%3E`;
+  const label = i ? `${listing.quartier} - vue ${i + 1}` : listing.quartier;
+  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='400'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23${c1.replace("#", "")}'/%3E%3Cstop offset='1' stop-color='%23${c2.replace("#", "")}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Ctext x='50%25' y='46%25' font-family='Arial' font-size='36' fill='%23ffffff' fill-opacity='0.7' text-anchor='middle' dominant-baseline='middle'%3E${label}%3C/text%3E%3Ctext x='50%25' y='58%25' font-family='Arial' font-size='20' fill='%23ffffff' fill-opacity='0.5' text-anchor='middle'%3EPhoto ${i + 1}%3C/text%3E%3C/svg%3E`;
 }
 
 /* ---------- Rendering ---------- */
@@ -159,9 +168,9 @@ function listingCard(listing) {
   const feats = `<span>${ICON_BED} ${listing.chambres || 1} ch.</span><span>${ICON_WATER} Eau</span>`;
   const phone = listing.phone || "Contact via plateforme";
   return `
-  <article class="listing-card ${isPremium ? "premium" : ""}" data-id="${listing.id}">
+  <article class="listing-card ${isPremium ? "premium" : ""}" data-id="${listing.id}" tabindex="0" role="button" aria-label="Voir les détails de : ${listing.title}">
     <div class="listing-media">
-      <img class="listing-img" src="${imgFor(listing, listing.id)}" alt="${listing.title}" loading="lazy">
+      <img class="listing-img" src="${imgFor(listing, 0)}" alt="${listing.title}" loading="lazy">
       <div class="listing-badges">${badgeHtml(listing)}</div>
       <button class="listing-fav ${isFav ? "active" : ""}" data-fav="${listing.id}" aria-label="Ajouter aux favoris">${ICON_HEART}</button>
     </div>
@@ -171,7 +180,7 @@ function listingCard(listing) {
       <div class="listing-loc">${ICON_PIN} ${listing.quartier}</div>
       <div class="listing-feats">${feats}</div>
       <div class="listing-footer">
-        <a class="btn btn-amber btn-sm" href="tel:${phone.replace(/\s/g, "")}">${ICON_CALL} Contacter</a>
+        <span class="btn btn-amber btn-sm">${ICON_CALL} Voir détails</span>
       </div>
     </div>
   </article>`;
@@ -203,6 +212,68 @@ function saveFavsUI() {
   $$(".listing-fav").forEach(btn => {
     const id = Number(btn.dataset.fav);
     btn.classList.toggle("active", state.favs.has(id));
+  });
+}
+
+/* ---------- Cartes cliquables + détails ---------- */
+function openDetail(listing) {
+  const modal = $("#detailModal");
+  const thumbs = { 0: "Vue principale", 1: "Chambre", 2: "Salon", 3: "Extérieur" };
+  const photos = [0, 1, 2, 3];
+  const feats = (listing.feats || [])
+    .map(f => `<span class="detail-feat">${f}</span>`)
+    .join("");
+
+  $("#detailTitle").textContent = listing.title;
+  $("#detailPrice").innerHTML = `<span class="detail-price-amt">${fmtPrix(listing.prix)}</span> / mois`;
+  $("#detailLoc").innerHTML = `${ICON_PIN} ${listing.quartier}`;
+  $("#detailDesc").textContent = listing.desc || "Description à venir. Contactez le propriétaire pour plus de détails et une visite.";
+  $("#detailBadges").innerHTML = badgeHtml(listing);
+  $("#detailFeats").innerHTML = feats;
+
+  const phone = (listing.phone || "").replace(/\s/g, "");
+  $("#detailCall").setAttribute("href", "tel:" + phone);
+  $("#detailWhatsapp").setAttribute("href", `https://wa.me/${phone}?text=${encodeURIComponent("Bonjour, je vous contacte depuis MonLogementCalavi au sujet de : " + listing.title)}`);
+
+  // Galerie
+  $("#detailImgMain").src = imgFor(listing, 0);
+  $("#detailImgMain").alt = listing.title;
+  $("#detailThumbs").innerHTML = photos.map(p => {
+    const label = thumbs[p] || `Photo ${p + 1}`;
+    return `<button class="detail-thumb ${p === 0 ? "active" : ""}" data-photo="${p}" aria-label="${label}"><img src="${imgFor(listing, p)}" alt="${label}"></button>`;
+  }).join("");
+
+  $$("#detailThumbs .detail-thumb").forEach(btn => {
+    btn.addEventListener("click", () => {
+      $$("#detailThumbs .detail-thumb").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      $("#detailImgMain").src = imgFor(listing, Number(btn.dataset.photo));
+    });
+  });
+
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function closeDetail() {
+  $("#detailModal").hidden = true;
+  document.body.style.overflow = "";
+}
+
+function initDetail() {
+  const modal = $("#detailModal");
+  $$("[data-detail-close]", modal).forEach(el => el.addEventListener("click", closeDetail));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDetail(); });
+
+  // Délégation : clic sur une carte -> ouvrir les détails (sauf sur le bouton favori)
+  document.addEventListener("click", (e) => {
+    const favBtn = e.target.closest("[data-fav]");
+    if (favBtn) return;
+    const card = e.target.closest(".listing-card[data-id]");
+    if (!card) return;
+    const listing = LISTINGS.find(l => l.id === Number(card.dataset.id));
+    if (!listing) return;
+    openDetail(listing);
   });
 }
 
@@ -371,6 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initToTop();
   initModal();
+  initDetail();
   initReveal();
   renderQuartiers();
   renderListings();
