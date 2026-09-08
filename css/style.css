@@ -309,6 +309,10 @@ section { padding: 64px 0; }
 .to-top:hover { transform: translateY(-3px); }
 .to-top svg { width: 22px; height: 22px; }
 
+/* ============ Hidden state (ne doit jamais être écrasé) ============ */
+.modal[hidden],
+.to-top[hidden] { display: none !important; }
+
 /* ============ Modal ============ */
 .modal {
   position: fixed; inset: 0; z-index: 100;
