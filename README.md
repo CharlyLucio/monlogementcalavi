@@ -23,7 +23,13 @@ netlify.toml     Configuration Netlify
 
 ## Déploiement
 
-Déployé sur [Netlify](https://www.netlify.com). Lien : https://monlogementcalavi.netlify.app
+Déployé sur [Netlify](https://www.netlify.com).
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/42cee872-08fe-430c-b245-5d7901c5cfca/deploy-status)](https://app.netlify.com/projects/monlogementcalavi/deploys)
+
+**Lien en ligne :** https://monlogementcalavi.netlify.app
+
+**Repo GitHub :** https://github.com/CharlyLucio/monlogementcalavi
 
 ## Roadmap
 
