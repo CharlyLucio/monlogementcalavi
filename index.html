@@ -29,6 +29,7 @@
         <li><a href="#annonces">Annonces</a></li>
         <li><a href="#quartiers">Quartiers</a></li>
         <li><a href="#comment">Comment ça marche</a></li>
+        <li><a href="#" data-owner-open>Espace propriétaire</a></li>
         <li><a href="#soumettre" class="btn btn-amber btn-sm">Publier une annonce</a></li>
       </ul>
     </nav>
@@ -104,6 +105,7 @@
         </div>
       </div>
       <p class="result-count" id="resultCount" aria-live="polite"></p>
+      <div id="ownerBannerBox"></div>
       <div class="listings-grid" id="listingsGrid">
         <!-- Render cards here -->
       </div>
@@ -283,6 +285,11 @@
       <div id="submitSuccess" class="success-box" hidden>
         <h3>Demande envoyée !</h3>
         <p id="submitSuccessText">Votre demande est bien reçue. Nous vérifions votre annonce par téléphone sous 24 h puis nous la publions.</p>
+        <div id="submitCodeBox" hidden>
+          <p class="form-hint">Votre code de gestion (à garder précieusement) :</p>
+          <p class="owner-code" id="submitCode"></p>
+        </div>
+        <p class="form-note">Ce code vous permet de reprendre la main sur votre annonce et de la booster quand elle sera en ligne.</p>
         <button class="btn btn-outline" data-close>Fermer</button>
       </div>
     </div>
@@ -335,6 +342,31 @@
         <h3>Boost confirmé !</h3>
         <p>Votre annonce est en tête des résultats. Pensez à l'actualiser pour garder votre visibilité.</p>
         <button class="btn btn-outline" data-boost-close>Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner modal -->
+  <div class="modal" id="ownerModal" hidden>
+    <div class="modal-backdrop" data-owner-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="ownerTitle">
+      <button class="modal-close" data-owner-close aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 id="ownerTitle">Espace propriétaire</h2>
+      <p class="modal-sub">Entrez le code de gestion reçu après la publication de votre annonce pour gérer et booster votre annonce.</p>
+      <form id="ownerForm" class="submit-form">
+        <label for="oCode">Votre code de gestion *</label>
+        <input type="text" id="oCode" name="code" required placeholder="Ex : MLC-001" maxlength="16">
+        <p id="ownerMsg" class="form-hint" aria-live="polite"></p>
+        <button type="submit" class="btn btn-amber btn-lg btn-block">Accéder à mon annonce</button>
+      </form>
+      <div id="ownerSuccess" class="success-box" hidden>
+        <h3>Bienvenue !</h3>
+        <p>Le bouton Booster est maintenant actif sur votre annonce. Il n'apparaît qu'à vous.</p>
+        <button class="btn btn-outline" data-owner-close>Fermer</button>
       </div>
     </div>
   </div>

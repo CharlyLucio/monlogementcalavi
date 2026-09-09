@@ -34,7 +34,7 @@ let LISTINGS = [
     formal: true,
     badges: ["premium"],
     verified: true,
-    isOwner: true,
+    code: "MLC-001",
     phone: "01 97 00 00 01",
     desc: "Entrée couchée sanitaire avec salle d'eau et WC privés, compteur personnel, proche du petit portail du campus. Sécurité garantie, eau et électricité disponibles. Plafonnée et carrelée.",
     conditions: ["Avance : 3+1", "Caution E-E : 20 000 F"],
@@ -143,7 +143,7 @@ let LISTINGS = [
     chambres: 1,
     formal: true,
     badges: ["premium"],
-    isOwner: true,
+    code: "MLC-008",
     phone: "01 97 00 00 08",
     desc: "1 chambre-salon sanitaire construction neuve, carrelage moderne, douche, plafond, compteurs personnels. Quartier sécurisé avec accès facile. Très propre.",
     conditions: ["Avance : 3+1", "Caution E-E : 30 000 F"],
@@ -159,7 +159,8 @@ const fmtPrix = (p) => new Intl.NumberFormat("fr-FR").format(p) + " F";
 const state = {
   filter: "all",
   query: { quartier: "", type: "", budget: "" },
-  favs: new Set(JSON.parse(localStorage.getItem("mlc-favs") || "[]"))
+  favs: new Set(JSON.parse(localStorage.getItem("mlc-favs") || "[]")),
+  owner: JSON.parse(localStorage.getItem("mlc-owner") || "null")
 };
 
 /* ---------- Helpers DOM ---------- */
@@ -206,8 +207,9 @@ function listingCard(listing) {
   const typeLabel = TYPE_LABELS[listing.type] || listing.type;
   const sanLabel = listing.sanitaire ? ` · ${listing.sanitaire}` : "";
   const feats = `<span>${ICON_BED} ${listing.chambres || 1} ${listing.chambres > 1 ? "ch." : "ch."}</span><span>${ICON_WATER} Eau</span>`;
-  const boostBtn = listing.isOwner
-    ? `<button class="btn btn-outline btn-sm listing-boost-cta" data-boost="${listing.id}">Booster (en tête)</button>`
+  const isOwned = state.owner && state.owner.id === listing.id;
+  const boostBtn = isOwned
+    ? `<button class="btn btn-outline btn-sm listing-boost-cta" data-boost="${listing.id}">Booster mon annonce (en tête)</button>`
     : "";
   return `
   <article class="listing-card ${isPremium ? "premium" : ""} ${listing.boost ? "boosted" : ""}" data-id="${listing.id}" tabindex="0" role="button" aria-label="Voir les détails de : ${listing.title}">
@@ -251,6 +253,15 @@ function renderListings() {
   grid.innerHTML = list.map(listingCard).join("");
   $("#resultCount").textContent = `${list.length} annonce(s) trouvée(s)`;
   empty.hidden = list.length > 0;
+
+  const bannerBox = $("#ownerBannerBox");
+  bannerBox.innerHTML = state.owner ? renderOwnerBanner() : "";
+  const logoutBtn = $("#ownerLogout");
+  if (logoutBtn) logoutBtn.addEventListener("click", () => {
+    state.owner = null;
+    localStorage.removeItem("mlc-owner");
+    renderListings();
+  });
 
   saveFavsUI();
 }
@@ -455,6 +466,68 @@ function submitNetlify(form) {
   });
 }
 
+/* ---------- Codes de gestion (Espace propriétaire) ---------- */
+function genOwnerCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 4; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return "MLC-" + s;
+}
+
+function savePublishedCode(code, phone, titre) {
+  const codes = JSON.parse(localStorage.getItem("mlc-codes") || "[]");
+  codes.push({ code, phone, titre, date: new Date().toISOString() });
+  localStorage.setItem("mlc-codes", JSON.stringify(codes));
+}
+
+function setOwner(listing, code) {
+  state.owner = { id: listing.id, code, titre: listing.title };
+  localStorage.setItem("mlc-owner", JSON.stringify(state.owner));
+}
+
+function initOwner() {
+  const modal = $("#ownerModal");
+  const form = $("#ownerForm");
+  const msg = $("#ownerMsg");
+  const success = $("#ownerSuccess");
+
+  function close() { modal.hidden = true; document.body.style.overflow = ""; }
+  function open() { modal.hidden = false; document.body.style.overflow = "hidden"; }
+
+  $$("[data-owner-open]").forEach(el => el.addEventListener("click", (e) => { e.preventDefault(); open(); }));
+  $$("[data-owner-close]").forEach(el => el.addEventListener("click", close));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const code = form.elements["code"].value.trim().toUpperCase();
+    if (state.owner && state.owner.code === code) {
+      success.hidden = false; form.hidden = true; return;
+    }
+    const listing = LISTINGS.find(l => l.code && l.code.toUpperCase() === code);
+    if (!listing) {
+      msg.textContent = "Code inconnu. Vérifiez le code reçu après la publication de votre annonce.";
+      return;
+    }
+    setOwner(listing, code);
+    msg.textContent = "";
+    form.hidden = true;
+    success.hidden = false;
+    renderListings();
+  });
+}
+
+function renderOwnerBanner() {
+  const l = LISTINGS.find(x => x.id === state.owner.id);
+  if (!l) return " ";
+  return `
+    <div class="owner-banner">
+      <span>Votre annonce est en mode propriétaire.</span>
+      <button class="btn btn-sm btn-outline" id="ownerBoostBtn" data-boost="${l.id}">Booster (en tête)</button>
+      <button class="btn btn-sm btn-outline" id="ownerLogout">Quitter</button>
+    </div>`;
+}
+
 /* ---------- Formulaires ---------- */
 function initModal() {
   const modal = $("#submitModal");
@@ -462,6 +535,8 @@ function initModal() {
   const form = $("#submitForm");
   const success = $("#submitSuccess");
   const successText = $("#submitSuccessText");
+  const codeBox = $("#submitCodeBox");
+  const codeEl = $("#submitCode");
   const qSelect = $("#fQuartier");
 
   const quartierNames = [...new Set(LISTINGS.map(l => l.quartier))].sort();
@@ -487,6 +562,10 @@ function initModal() {
 
     submitNetlify(form)
       .then(res => {
+        const code = genOwnerCode();
+        savePublishedCode(code, form.elements["phone"].value, form.elements["titre"].value);
+        codeEl.textContent = code;
+        codeBox.hidden = false;
         const formule = form.elements["formule"].value;
         if (formule === "gratuit") {
           successText.textContent = "Votre demande est bien reçue. Nous vérifions votre annonce par téléphone sous 24 h puis nous la publions. C'est gratuit !";
@@ -585,6 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initToTop();
   initModal();
   initBoost();
+  initOwner();
   initDetail();
   initReveal();
   renderQuartiers();
