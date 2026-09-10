@@ -175,13 +175,12 @@ const ICON_HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11l14-9-4 9 4 9-14-9z"/><path d="M9 22l7-7-7-7"/><path d="M2 22l7-7"/></svg>'; // unused placeholder
 const ICON_CALL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg>';
 
-/* ---------- Images (placeholders avec gradient) ---------- */
+/* ---------- Images (photos réelles temporaires via Lorem Picsum) ---------- */
+/* À remplacer plus tard par les vraies photos des logements. Le seed fixe
+   garantit une image stable par annonce et par vue. */
 function imgFor(listing, i) {
-  const hues = ["#1e3a5f,#0ea5e9", "#3b2f14,#f59e0b", "#1a2f3a,#38bdf8", "#241a10,#d97706", "#0f2533,#2f4460", "#2a1f33,#a855f7"];
-  const h = hues[(listing.id + (i || 0)) % hues.length];
-  const [c1, c2] = h.split(",");
-  const label = i ? `${listing.quartier} - vue ${i + 1}` : listing.quartier;
-  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='400'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23${c1.replace("#", "")}'/%3E%3Cstop offset='1' stop-color='%23${c2.replace("#", "")}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Ctext x='50%25' y='46%25' font-family='Arial' font-size='36' fill='%23ffffff' fill-opacity='0.7' text-anchor='middle' dominant-baseline='middle'%3E${label}%3C/text%3E%3Ctext x='50%25' y='58%25' font-family='Arial' font-size='20' fill='%23ffffff' fill-opacity='0.5' text-anchor='middle'%3EPhoto ${i + 1}%3C/text%3E%3C/svg%3E`;
+  const seed = `mlc-${listing.id}-${i || 0}`;
+  return `https://picsum.photos/seed/${seed}/640/400`;
 }
 
 /* ---------- Rendering ---------- */
