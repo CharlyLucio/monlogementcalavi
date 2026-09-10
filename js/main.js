@@ -175,12 +175,26 @@ const ICON_HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11l14-9-4 9 4 9-14-9z"/><path d="M9 22l7-7-7-7"/><path d="M2 22l7-7"/></svg>'; // unused placeholder
 const ICON_CALL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg>';
 
-/* ---------- Images (photos réelles temporaires via Lorem Picsum) ---------- */
-/* À remplacer plus tard par les vraies photos des logements. Le seed fixe
-   garantit une image stable par annonce et par vue. */
+/* ---------- Images (vraies photos d'intérieur, temporaires) ---------- */
+/* Photos de démonstration (Unsplash, licence libre). À remplacer plus tard par
+   les vraies photos des logements. La rotation déterministe donne des images
+   variées mais stables pour chaque annonce et chaque vue. */
+const IMG_POOL = [
+  "photo-1773754532196-014342510e64", // salon moderne
+  "photo-1776348065068-476a708a2d3a", // chambre avec vue
+  "photo-1778604263874-5d9f372e0434", // salon fauteuil
+  "photo-1759238136859-b6fe007fe126", // salon canapé
+  "photo-1758060215425-303300b1c7e2", // chambre lumineuse bureau
+  "photo-1721395283507-1b17e527a922", // cuisine/living
+  "photo-1616486338812-3dadae4b4ace", // salon bibliothèque
+  "photo-1502672260266-1c1ef2d93688", // appartement moderne
+  "photo-1522708323590-d24dbb6b0267", // intérieur appartement
+  "photo-1770810416806-cca71456d937"  // façade immeuble
+];
+
 function imgFor(listing, i) {
-  const seed = `mlc-${listing.id}-${i || 0}`;
-  return `https://picsum.photos/seed/${seed}/640/400`;
+  const idx = (listing.id * 3 + (i || 0) * 2) % IMG_POOL.length;
+  return `https://images.unsplash.com/${IMG_POOL[idx]}?auto=format&fit=crop&w=640&h=400&q=60`;
 }
 
 /* ---------- Rendering ---------- */
