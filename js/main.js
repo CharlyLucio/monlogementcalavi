@@ -16,8 +16,6 @@ const QUARTIERS = [
 const TYPE_LABELS = {
   "entree-couchee": "Entrée couchée",
   "chambre-salon": "Chambre(s) Salon",
-  "1-chambre-salon": "1 Chambre Salon",
-  "appartement": "2+ Chambres Salon",
   "studio": "Studio",
   "colocation": "Colocation",
   "boutique": "Boutique",
@@ -61,7 +59,7 @@ let LISTINGS = [
     id: 3,
     title: "2 Chambres Salon Sanitaire à Kpota (colocation possible)",
     quartier: "Kpota",
-    type: "appartement",
+    type: "chambre-salon",
     sanitaire: "Sanitaire",
     prix: 60000,
     chambres: 2,
@@ -109,7 +107,7 @@ let LISTINGS = [
     id: 6,
     title: "3 Chambres Salon Sanitaire à Bidossessi",
     quartier: "Bidossessi",
-    type: "appartement",
+    type: "chambre-salon",
     sanitaire: "Sanitaire",
     prix: 45000,
     chambres: 3,
@@ -139,7 +137,7 @@ let LISTINGS = [
     id: 8,
     title: "1 Chambre Salon Sanitaire neuf à Godomey Togoudo",
     quartier: "Godomey",
-    type: "1-chambre-salon",
+    type: "chambre-salon",
     sanitaire: "Sanitaire",
     prix: 35000,
     chambres: 1,
@@ -563,8 +561,8 @@ function initModal() {
   });
 
   // Sous-champs dynamiques selon le type de logement choisi
-  const SANITAIRE_TYPES = ["entree-couchee", "chambre-salon", "1-chambre-salon", "appartement", "studio", "colocation"];
-  const CHAMBRES_TYPES = ["chambre-salon", "1-chambre-salon", "appartement", "colocation"];
+  const SANITAIRE_TYPES = ["entree-couchee", "chambre-salon", "studio", "colocation"];
+  const CHAMBRES_TYPES = ["chambre-salon", "colocation"];
 
   function updateTypeFields() {
     const type = form.elements["type"].value;
