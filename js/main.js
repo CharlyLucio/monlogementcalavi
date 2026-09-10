@@ -15,11 +15,13 @@ const QUARTIERS = [
 
 const TYPE_LABELS = {
   "entree-couchee": "Entrée couchée",
-  "chambre-salon": "Chambre Salon",
+  "chambre-salon": "Chambre(s) Salon",
   "1-chambre-salon": "1 Chambre Salon",
   "appartement": "2+ Chambres Salon",
   "studio": "Studio",
-  "colocation": "Colocation"
+  "colocation": "Colocation",
+  "boutique": "Boutique",
+  "autre": "Autre"
 };
 
 let LISTINGS = [
@@ -559,6 +561,20 @@ function initModal() {
     opt.textContent = name;
     qSelect.appendChild(opt);
   });
+
+  // Sous-champs dynamiques selon le type de logement choisi
+  const SANITAIRE_TYPES = ["entree-couchee", "chambre-salon", "1-chambre-salon", "appartement", "studio", "colocation"];
+  const CHAMBRES_TYPES = ["chambre-salon", "1-chambre-salon", "appartement", "colocation"];
+
+  function updateTypeFields() {
+    const type = form.elements["type"].value;
+    $("#fSanitaireRow", modal).hidden = !SANITAIRE_TYPES.includes(type);
+    $("#fChambresRow", modal).hidden = !CHAMBRES_TYPES.includes(type);
+    $("#fAutreRow", modal).hidden = type !== "autre";
+    $("#precisionsFieldset", modal).hidden = !type;
+  }
+  form.elements["type"].addEventListener("change", updateTypeFields);
+  updateTypeFields();
 
   function open() { modal.hidden = false; document.body.style.overflow = "hidden"; }
   function close() { modal.hidden = true; document.body.style.overflow = ""; }
